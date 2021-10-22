@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(cors());
+app.use(express.json());
 
 const port = 5000;
 
@@ -20,13 +21,20 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
     const search = req.query.search;
-    if(search){
-        const searchResult = users.filter(user=>user.name.toLocaleLowerCase().includes(search));
+    if (search) {
+        const searchResult = users.filter(user => user.name.toLocaleLowerCase().includes(search));
         res.send(searchResult);
     }
-    else{
+    else {
         res.send(users)
     }
+})
+
+app.post('/users', (req, res) => {
+    const newUser = req.body;
+    newUser.id = users.length;
+    users.push(newUser);
+    res.json(newUser);
 })
 
 app.get('/users/:id', (req, res) => {
