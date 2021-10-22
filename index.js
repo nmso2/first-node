@@ -1,5 +1,8 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
+app.use(cors());
+
 const port = 5000;
 
 const users = [
@@ -16,7 +19,14 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
-    res.send(users)
+    const search = req.query.search;
+    if(search){
+        const searchResult = users.filter(user=>user.name.toLocaleLowerCase().includes(search));
+        res.send(searchResult);
+    }
+    else{
+        res.send(users)
+    }
 })
 
 app.get('/users/:id', (req, res) => {
